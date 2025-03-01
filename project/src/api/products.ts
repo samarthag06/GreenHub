@@ -68,6 +68,25 @@ export const fetchProductDetails = async (id: string) => {
   return data;
 };
 
+
+
+export const addToPurchaseHistory = async (productId: string, userId: string) => {
+  try {
+    
+    const {data} = await api.post('/products/purchase', {
+      productId,
+      userId,
+    });
+    return data;
+  } catch (error) {
+    console.error('Error adding product to cart:', error);
+    throw error;
+  }
+};
+
+
+
+
 export const submitReview = async (id: string) => {
 
 };

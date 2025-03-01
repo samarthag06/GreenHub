@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const FAQ = () => {
+function FAQ  () {
   // State to manage which question is open
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 

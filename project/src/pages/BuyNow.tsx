@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { Loader2, Star } from 'lucide-react';
-import { fetchProductDetails, addToCart } from '../api/products';
+import { fetchProductDetails, addToCart, addToPurchaseHistory } from '../api/products';
 
 interface Product {
   _id: string;
@@ -23,6 +23,15 @@ function BuyNow() {
   const navigate = useNavigate();
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
+  const [user, setUser] = useState<any>(null); // State for user
+
+  // Set user from localStorage
+  useEffect(() => {
+    const userString = localStorage.getItem('user');
+    if (userString) {
+      setUser(JSON.parse(userString));
+    }
+  }, []);
 
   // Fetch product details
   const {
@@ -36,7 +45,7 @@ function BuyNow() {
 
   // Mutation for adding to cart
   const addToCartMutation = useMutation({
-    mutationFn: (productId: string) => addToCart(productId, localStorage.getItem('user') || ''),
+    mutationFn: (productId: string) => addToCart(productId, user?.email || ''),
     onSuccess: () => {
       alert('Product added to cart successfully!');
     },
@@ -45,6 +54,27 @@ function BuyNow() {
       alert('Failed to add product to cart. Please try again.');
     },
   });
+
+  // Mutation for adding to purchase history
+  const addToPurchaseHistoryMutation = useMutation({
+    mutationFn: ({ productId, userId }: { productId: string; userId: string }) =>
+      addToPurchaseHistory(productId, userId),
+    onSuccess: () => {
+      navigate(`/payment/${productId}`); // Navigate to payment page after success
+    },
+    onError: (error) => {
+      console.error('Error adding product to purchase history:', error);
+      alert('Failed to proceed to payment. Please try again.');
+    },
+  });
+
+  const handleProceedToPayment = () => {
+    if (productId && user) {
+      addToPurchaseHistoryMutation.mutate({ productId, userId: user.id });
+    } else {
+      alert('User or product ID is missing. Please try again.');
+    }
+  };
 
   if (isLoading) {
     return (
@@ -110,7 +140,7 @@ function BuyNow() {
                 Add to Cart
               </button>
               <button
-                onClick={() => navigate(`/payment/${product._id}`)}
+                onClick={handleProceedToPayment}
                 className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
               >
                 Proceed to Payment

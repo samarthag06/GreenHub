@@ -1,6 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const About = () => {
+function About() {
+  const navigate = useNavigate();
+  const [localUser, setLocalUser] = useState<any>(null);
+
+ 
+
+ 
+
   return (
     <div className="min-h-screen bg-gradient-to-r from-green-50 to-blue-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -167,18 +175,16 @@ const About = () => {
         </div>
       </div>
       <style>
-
-{
-
-    `
-    h1{
-    margin-top: 2.5rem;
-    }
-    `
-}
-        </style>
+        {
+          `
+          h1 {
+            margin-top: 2.5rem;
+          }
+          `
+        }
+      </style>
     </div>
   );
-};
+}
 
 export default About;

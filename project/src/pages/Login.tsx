@@ -24,7 +24,7 @@ function Login() {
         isadmin: data.user.isadmin
       }));
   
-      navigate('/dashboard');
+      navigate('/');
     },
   });
 

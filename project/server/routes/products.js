@@ -165,6 +165,7 @@ router.post("/request_new_product", async (req, res) => {
 
 router.post('/addtocart', async (req, res) => {
   try {
+    console.log("here in add to cart");
     const { productId, email } = req.body;
 
     // Validate input
@@ -190,5 +191,45 @@ router.post('/addtocart', async (req, res) => {
     res.status(500).json({ message: 'Server error adding product to cart' });
   }
 });
+router.post('/purchase', async (req, res) => {
+  try {
+    const { productId, userId } = req.body;
+    
+
+    // Validate input
+    if (!productId || !userId) {
+      return res.status(400).json({ message: 'Product ID and user ID are required' });
+    }
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    
+    // Check if user exists
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Find the product by ID
+    const product = await Product.findById(productId);
+
+    
+    // Check if product exists
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    // Add the product to the user's purchaseHistory array
+    user.purchaseHistory.push(product); // You can add more fields if needed
+    await user.save();
+
+    res.json({ message: 'Product added to purchase history successfully', purchaseHistory: user.purchaseHistory });
+  } catch (error) {
+    console.error('Error adding product to purchase history:', error);
+    res.status(500).json({ message: 'Server error adding product to purchase history' });
+  }
+});
+
+
 
 export default router;
