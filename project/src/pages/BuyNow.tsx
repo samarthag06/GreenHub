@@ -30,8 +30,14 @@ function BuyNow() {
     const userString = localStorage.getItem('user');
     if (userString) {
       setUser(JSON.parse(userString));
+    }else{
+
+      navigate('/login');
     }
+    
   }, []);
+
+ 
 
   // Fetch product details
   const {
