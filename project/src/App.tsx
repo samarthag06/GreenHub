@@ -15,6 +15,12 @@ import Notification from './pages/notification';
 import Adminproducts from './pages/adminproducts'
 import ManufacturerDashboard from './pages/ManufacturerDashboard';
 import Mycart from "./pages/Mycart"
+import BuyNow from "./pages/BuyNow"
+import Payment from "./pages/Payment"
+import FAQ from "./pages/FAQ"
+import About from "./pages/About"
+
+
 function App() {
   return (
     <Router>
@@ -34,7 +40,12 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/admin" element={<AdminPanel />} />
           <Route path="/notifications" element={<Notification />} />
+          <Route path="/buy/:productId" element={<BuyNow />} />
           <Route path="/manufacturer" element={<ManufacturerDashboard />} />
+          <Route path="/payment/:productId" element={<Payment/>} />
+          <Route path="/faq" element={<FAQ/>} />
+          <Route path="/about" element={<About/>} />
+          
         </Routes>
       </div>
     </Router>

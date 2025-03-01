@@ -61,3 +61,17 @@ export const addToCart = async (productId: string, email: string) => {
     throw error;
   }
 };
+
+export const fetchProductDetails = async (id: string) => {
+  console.log(id);
+  const { data } = await api.get(`/products/buy/${id}`);
+  return data;
+};
+
+export const submitReview = async (id: string) => {
+
+};
+
+export const fetchReviews = async (id: string) => {
+
+};

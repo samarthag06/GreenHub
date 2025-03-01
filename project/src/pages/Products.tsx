@@ -100,13 +100,30 @@ function Products() {
                     Score: {product.greenScore}
                   </span>
                 </div>
-                <button
-                  onClick={() => addToCartMutation.mutate(product._id)}
-                  className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition-colors"
-                >
-                  Add to Cart
-                </button>
+                <div className="flex flex-col space-y-2">
+                  <button
+                    onClick={() => addToCartMutation.mutate(product._id)}
+                    className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition-colors"
+                  >
+                    Add to Cart
+                  </button>
+                  <button
+                    onClick={() => navigate(`/buy/${product._id}`)} // Redirect to the buy page
+                    className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors"
+                  >
+                    Buy Now
+                  </button>
+                </div>
               </div>
+              <style>
+                {
+                  `
+                  h1{
+                  margin-top: 3.5rem;
+                  }
+                  `
+                }
+              </style>
             </div>
           ))}
         </div>

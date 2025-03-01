@@ -1,30 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { UserPlus } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 import { register } from '../api/auth';
-import axios from 'axios';
 
 function Register() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    role: 'user'
+    role: 'user',
   });
   const navigate = useNavigate();
+
+  // Check if token exists in local storage on component mount
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/'); // Redirect to home page if token exists
+    }
+  }, [navigate]);
 
   const registerMutation = useMutation({
     mutationFn: () => register(formData),
     onSuccess: (data) => {
       console.log(data);
-      localStorage.setItem('token', data.token);
-      navigate('/dashboard');
+      localStorage.setItem('token', data.token); // Save token to local storage
+      navigate('/'); // Redirect to home page after successful registration
     },
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
-    console.log("hello")
     e.preventDefault();
     registerMutation.mutate();
   };
@@ -43,7 +49,9 @@ function Register() {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
-              <label htmlFor="name" className="sr-only">Full name</label>
+              <label htmlFor="name" className="sr-only">
+                Full name
+              </label>
               <input
                 id="name"
                 name="name"
@@ -56,7 +64,9 @@ function Register() {
               />
             </div>
             <div>
-              <label htmlFor="email" className="sr-only">Email address</label>
+              <label htmlFor="email" className="sr-only">
+                Email address
+              </label>
               <input
                 id="email"
                 name="email"
@@ -69,7 +79,9 @@ function Register() {
               />
             </div>
             <div>
-              <label htmlFor="password" className="sr-only">Password</label>
+              <label htmlFor="password" className="sr-only">
+                Password
+              </label>
               <input
                 id="password"
                 name="password"
@@ -82,7 +94,9 @@ function Register() {
               />
             </div>
             <div>
-              <label htmlFor="role" className="sr-only">Role</label>
+              <label htmlFor="role" className="sr-only">
+                Role
+              </label>
               <select
                 id="role"
                 name="role"
