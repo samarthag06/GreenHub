@@ -2,6 +2,8 @@ import express from 'express';
 import Product from '../models/Product.js';
 import auth from '../middleware/auth.js';
 import User from '../models/User.js'
+import Manufacturer from '../models/Manufacturer.js';
+
 const router = express.Router();
 
 // Get all products
@@ -119,16 +121,56 @@ router.post("/request_new_product", async (req, res) => {
   try {
    
 
-    const { name, description, price, manufacturer, carbonContent, category, images, stock } = req.body;
-
+    const { name, description, price, manufacturer, carbonFootprint, category, images, stock , packagingType,certification,endOfLifeDisposal} = req.body;
+console.log(name, description, price, manufacturer, carbonFootprint, category, images, stock , packagingType,certification,endOfLifeDisposal);
     // Find the manufacturer to get their name
+
+
+   
+    let carbonScore=0;
+
+    if((40 - (carbonFootprint * 0.4)) >0){
+      carbonScore = (40 - (carbonFootprint * 0.4));
+    }
+
+    let packagingScore = 0;
+    if (packagingType === "Biodegradable") {
+        packagingScore = 20;
+    } else {
+        packagingScore = 5; // Non-biodegradable packaging has a penalty
+    }
+
+
+    let certScore = 0;
+    if(certification==="None"){
+      certScore=0;
+    }else {
+      certScore = 20;
+    }
+
+       // **4. End-of-Life Disposal Contribution (20%)**
+       let disposalScore = 0;
+       if (endOfLifeDisposal === "Recyclable/Compostable") {
+           disposalScore = 20;
+       } else if (endOfLifeDisposal === "Partially Recyclable") {
+           disposalScore = 10;
+       } else {
+           disposalScore = 5;  // Non-recyclable gets the lowest score
+       }
+
+
+
+
+    console.log("hello")
     const manufacturerUser = await User.findById(manufacturer);
     if (!manufacturerUser) {
       return res.status(404).json({ message: "Manufacturer not found" });
     }
 
-    const greenScore = carbonContent / 4;
+   let greenScore = carbonScore + packagingScore + certScore + disposalScore; // just change this greenScore logic formula.
 
+
+const carbonContent = carbonFootprint;
     // Create the new product
     const newProduct = new Product({
       name,
@@ -143,6 +185,8 @@ router.post("/request_new_product", async (req, res) => {
       ispending: true, // Set pending to true by default
       updatedAt: new Date(),
     });
+
+    console.log("grenscore is" ,greenScore);
 
     const savedProduct = await newProduct.save();
 
@@ -191,10 +235,49 @@ router.post('/addtocart', async (req, res) => {
     res.status(500).json({ message: 'Server error adding product to cart' });
   }
 });
+// router.post('/purchase', async (req, res) => {
+//   try {
+//     const { productId, userId } = req.body;
+    
+
+//     // Validate input
+//     if (!productId || !userId) {
+//       return res.status(400).json({ message: 'Product ID and user ID are required' });
+//     }
+
+//     // Find the user by ID
+//     const user = await User.findById(userId);
+
+    
+//     // Check if user exists
+//     if (!user) {
+//       return res.status(404).json({ message: 'User not found' });
+//     }
+
+//     // Find the product by ID
+//     const product = await Product.findById(productId);
+
+    
+//     // Check if product exists
+//     if (!product) {
+//       return res.status(404).json({ message: 'Product not found' });
+//     }
+
+//     // Add the product to the user's purchaseHistory array
+//     user.purchaseHistory.push(product); // You can add more fields if needed
+//     await user.save();
+
+//     res.json({ message: 'Product added to purchase history successfully', purchaseHistory: user.purchaseHistory });
+//   } catch (error) {
+//     console.error('Error adding product to purchase history:', error);
+//     res.status(500).json({ message: 'Server error adding product to purchase history' });
+//   }
+// });
+
 router.post('/purchase', async (req, res) => {
   try {
-    const { productId, userId } = req.body;
     
+    const { productId, userId } = req.body;
 
     // Validate input
     if (!productId || !userId) {
@@ -204,7 +287,6 @@ router.post('/purchase', async (req, res) => {
     // Find the user by ID
     const user = await User.findById(userId);
 
-    
     // Check if user exists
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -213,7 +295,6 @@ router.post('/purchase', async (req, res) => {
     // Find the product by ID
     const product = await Product.findById(productId);
 
-    
     // Check if product exists
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
@@ -223,7 +304,26 @@ router.post('/purchase', async (req, res) => {
     user.purchaseHistory.push(product); // You can add more fields if needed
     await user.save();
 
-    res.json({ message: 'Product added to purchase history successfully', purchaseHistory: user.purchaseHistory });
+    // Find the manufacturer by ID from the product
+    const manufacturer = await User.findById(product.manufacturer);
+
+    // Check if manufacturer exists
+    if (!manufacturer) {
+      return res.status(404).json({ message: 'Manufacturer not found' });
+    }
+
+    // Increment the total_products_sold field
+    manufacturer.total_products_sold += 1;
+    if(product.greenScore>=65){
+      manufacturer.green_products_sold += 1;
+    }
+    await manufacturer.save();
+
+    res.json({
+      message: 'Product added to purchase history successfully',
+      purchaseHistory: user.purchaseHistory,
+      total_products_sold: manufacturer.total_products_sold, // Optional: Return updated total_products_sold
+    });
   } catch (error) {
     console.error('Error adding product to purchase history:', error);
     res.status(500).json({ message: 'Server error adding product to purchase history' });
