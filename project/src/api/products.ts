@@ -94,3 +94,50 @@ export const submitReview = async (id: string) => {
 export const fetchReviews = async (id: string) => {
 
 };
+
+
+
+// Fetch user count
+export const fetchUserCount = async () => {
+  try {
+    console.log("fetchusercount");
+    const { data } = await api.get('/products/count');
+    return data.count;
+  } catch (error) {
+    console.error('Error fetching user count:', error);
+    throw error;
+  }
+};
+
+// Fetch product count
+export const fetchProductCount = async () => {
+  try {
+    // const { data } = await api.get('/products/count_products');
+    return 1;
+  } catch (error) {
+    console.error('Error fetching product count:', error);
+    throw error;
+  }
+};
+
+// Fetch manufacturer count
+export const fetchManufacturerCount = async () => {
+  try {
+    const { data } = await api.get('/products/count_manufacturers');
+    return data.count;
+  } catch (error) {
+    console.error('Error fetching manufacturer count:', error);
+    throw error;
+  }
+};
+
+// Fetch average green score
+export const fetchGreenScoreAvg = async () => {
+  try {
+    const { data } = await api.get('/products/count_average');
+    return data.avg;
+  } catch (error) {
+    console.error('Error fetching average green score:', error);
+    throw error;
+  }
+};

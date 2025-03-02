@@ -20,7 +20,7 @@ function FAQ  () {
     },
     {
       question: 'How do I contact customer support?',
-      answer: 'You can contact our customer support team by emailing support@greenmart.com or calling +1 (800) 123-4567.',
+      answer: 'You can contact our customer support team by emailing samarthag22@iitk.ac.in or calling +91 8003726610.',
     },
     {
       question: 'Is my payment information secure?',

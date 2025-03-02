@@ -230,6 +230,45 @@ router.post('/purchase', async (req, res) => {
   }
 });
 
+router.get("/countusers", async (req, res) => {
+  try {
+    
+console.log("he_in product.js");
+    const count = await User.countDocuments(); // Assuming you're using Mongoose
+    res.json({ count });
+
+
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
+
+router.get('/count_products', async (req, res) => {
+  try {
+    console.log("count_products")
+    const count = await Product.countDocuments();
+    res.json({ count });
+  } catch (error) {
+    console.error('Error fetching product count:', error);
+    res.status(500).json({ error: 'Failed to fetch product count' });
+  }
+});
+
+
+router.get('/count_users', async (req, res) => {
+  try {
+    console.log("count_users")
+    const count = await User.countDocuments();
+    res.json({ count });
+  } catch (error) {
+    console.error('Error fetching product count:', error);
+    res.status(500).json({ error: 'Failed to fetch product count' });
+  }
+});
+
+
 
 
 export default router;

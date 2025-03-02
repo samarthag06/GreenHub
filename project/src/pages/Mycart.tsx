@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // Import Link
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Trash2 } from 'lucide-react';
 import { getmycart, removeFromCart } from '../api/users'; // Import API functions
@@ -66,7 +66,11 @@ function Mycart() {
                 key={product._id}
                 className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
               >
-                <div className="flex items-center space-x-4">
+                {/* Wrap product details in a Link */}
+                <Link
+                  to={`/buy/${product._id}`}
+                  className="flex items-center space-x-4 flex-1" // flex-1 to make the entire area clickable
+                >
                   <img src={product.images?.[0]} alt={product.name} className="h-16 w-16 object-cover rounded" />
                   <div>
                     <p className="font-semibold">{product.name}</p>
@@ -74,7 +78,7 @@ function Mycart() {
                     <p className="text-sm text-gray-500">Green Score: {product.greenScore}</p>
                     <p className="text-sm text-gray-500">Price: ${product.price}</p>
                   </div>
-                </div>
+                </Link>
                 <button
                   onClick={() => handleDelete(product._id)}
                   className="text-red-600 hover:text-red-700"

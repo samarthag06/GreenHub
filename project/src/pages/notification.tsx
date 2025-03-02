@@ -23,6 +23,9 @@ const Notifications: React.FC = () => {
     enabled: !!localUser?.email, // Prevents API call if user is not logged in
   });
 
+  // Reverse the notifications array to show latest first
+  const reversedNotifications = notifications ? [...notifications].reverse() : [];
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Notifications</h1>
@@ -35,9 +38,9 @@ const Notifications: React.FC = () => {
           <p className="text-gray-500">Loading notifications...</p>
         ) : error ? (
           <p className="text-red-500">Failed to fetch notifications.</p>
-        ) : notifications && notifications.length > 0 ? (
+        ) : reversedNotifications.length > 0 ? (
           <ul className="space-y-4">
-            {notifications.map((notif: string, index: number) => (
+            {reversedNotifications.map((notif: string, index: number) => (
               <li key={index} className="p-4 bg-gray-100 rounded-lg shadow">
                 {notif}
               </li>
@@ -49,12 +52,10 @@ const Notifications: React.FC = () => {
       </div>
       <style>
         {
-          
           `
           h1{
           margin-top: 3rem;
           }
-          
           `
         }
       </style>

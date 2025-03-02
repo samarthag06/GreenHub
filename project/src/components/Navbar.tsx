@@ -32,7 +32,7 @@ function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-2 hover:scale-105 transition-transform duration-200">
             <Leaf className="h-8 w-8 text-green-600" />
             <span className="text-xl font-bold text-gray-900">GreenMart</span>
           </Link>
@@ -40,22 +40,22 @@ function Navbar() {
           {/* Hamburger Menu Icon (Visible on Mobile) */}
           <button
             onClick={toggleMobileMenu}
-            className="md:hidden text-gray-600 hover:text-green-600 focus:outline-none"
+            className="md:hidden text-gray-600 hover:text-green-600 focus:outline-none transition-transform duration-200 hover:scale-110"
           >
             {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
 
           {/* Desktop Navigation Links (Hidden on Mobile) */}
           <div className="hidden md:flex items-center space-x-6 md:space-x-8">
-            <Link to="/products" className="flex items-center space-x-1 text-gray-600 hover:text-green-600">
+            <Link to="/products" className="flex items-center space-x-1 text-gray-600 hover:text-green-600 hover:scale-105 transition-transform duration-200">
               <ShoppingBag className="h-5 w-5" />
               <span>Products</span>
             </Link>
-            <Link to="/community" className="flex items-center space-x-1 text-gray-600 hover:text-green-600">
+            <Link to="/community" className="flex items-center space-x-1 text-gray-600 hover:text-green-600 hover:scale-105 transition-transform duration-200">
               <Users className="h-5 w-5" />
               <span>Community</span>
             </Link>
-            <Link to="/leaderboard" className="flex items-center space-x-1 text-gray-600 hover:text-green-600">
+            <Link to="/leaderboard" className="flex items-center space-x-1 text-gray-600 hover:text-green-600 hover:scale-105 transition-transform duration-200">
               <Trophy className="h-5 w-5" />
               <span>Leaderboard</span>
             </Link>
@@ -64,7 +64,7 @@ function Navbar() {
             {isAdmin && (
               <Link
                 to="/admin"
-                className="flex items-center space-x-1 text-red-600 hover:text-red-700 font-semibold border border-red-600 px-3 py-1 rounded-lg"
+                className="flex items-center space-x-1 text-red-600 hover:text-red-700 font-semibold border border-red-600 px-3 py-1 rounded-lg hover:scale-105 transition-transform duration-200"
               >
                 <Shield className="h-5 w-5" />
                 <span>Admin Panel</span>
@@ -75,7 +75,7 @@ function Navbar() {
             {isManufacturer && (
               <Link
                 to="/AddProduct"
-                className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 font-semibold border border-blue-600 px-3 py-1 rounded-lg"
+                className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 font-semibold border border-blue-600 px-3 py-1 rounded-lg hover:scale-105 transition-transform duration-200"
               >
                 <PlusCircle className="h-5 w-5" />
                 <span>Add Product</span>
@@ -88,23 +88,23 @@ function Navbar() {
             {user ? (
               <>
                 {/* Notification Icon */}
-                <Link to="/notifications" className="text-gray-600 hover:text-green-600 relative">
+                <Link to="/notifications" className="text-gray-600 hover:text-green-600 relative hover:scale-110 transition-transform duration-200">
                   <Bell className="h-6 w-6" />
                 </Link>
 
                 {/* Cart Icon (Only for Users) */}
                 {isUser && (
-                  <Link to="/mycart" className="text-gray-600 hover:text-green-600 relative">
+                  <Link to="/mycart" className="text-gray-600 hover:text-green-600 relative hover:scale-110 transition-transform duration-200">
                     <ShoppingCart className="h-6 w-6" />
                   </Link>
                 )}
 
-                <Link to="/dashboard" className="text-gray-600 hover:text-green-600">
+                <Link to="/dashboard" className="text-gray-600 hover:text-green-600 hover:scale-110 transition-transform duration-200">
                   <User className="h-6 w-6" />
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="flex items-center space-x-1 text-green-600 hover:text-green-700 font-medium"
+                  className="flex items-center space-x-1 text-green-600 hover:text-green-700 font-medium hover:scale-105 transition-transform duration-200"
                 >
                   <LogOut className="h-5 w-5" />
                   <span>Logout</span>
@@ -112,12 +112,12 @@ function Navbar() {
               </>
             ) : (
               <>
-                <Link to="/login" className="text-gray-600 hover:text-green-600">
+                <Link to="/login" className="text-gray-600 hover:text-green-600 hover:scale-105 transition-transform duration-200">
                   Login
                 </Link>
                 <Link
                   to="/register"
-                  className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+                  className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 hover:scale-105 transition-transform duration-200"
                 >
                   Register
                 </Link>
@@ -127,70 +127,72 @@ function Navbar() {
         </div>
 
         {/* Mobile Menu (Visible on Mobile) */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden bg-white shadow-lg">
-            <div className="px-4 py-2 space-y-4">
-              <Link to="/products" className="block text-gray-600 hover:text-green-600">
-                Products
-              </Link>
-              <Link to="/community" className="block text-gray-600 hover:text-green-600">
-                Community
-              </Link>
-              <Link to="/leaderboard" className="block text-gray-600 hover:text-green-600">
-                Leaderboard
-              </Link>
+        <div
+          className={`md:hidden bg-white shadow-lg overflow-hidden transition-all duration-300 ease-in-out ${
+            isMobileMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
+          <div className="px-4 py-2 space-y-4">
+            <Link to="/products" className="block text-gray-600 hover:text-green-600 hover:pl-2 transition-all duration-200">
+              Products
+            </Link>
+            <Link to="/community" className="block text-gray-600 hover:text-green-600 hover:pl-2 transition-all duration-200">
+              Community
+            </Link>
+            <Link to="/leaderboard" className="block text-gray-600 hover:text-green-600 hover:pl-2 transition-all duration-200">
+              Leaderboard
+            </Link>
 
-              {/* Admin Dashboard (Only for Admins) */}
-              {isAdmin && (
-                <Link to="/admin" className="block text-red-600 hover:text-red-700 font-semibold">
-                  Admin Panel
+            {/* Admin Dashboard (Only for Admins) */}
+            {isAdmin && (
+              <Link to="/admin" className="block text-red-600 hover:text-red-700 font-semibold hover:pl-2 transition-all duration-200">
+                Admin Panel
+              </Link>
+            )}
+
+            {/* Add Product (Only for Manufacturers) */}
+            {isManufacturer && (
+              <Link to="/AddProduct" className="block text-blue-600 hover:text-blue-700 font-semibold hover:pl-2 transition-all duration-200">
+                Add Product
+              </Link>
+            )}
+
+            {/* User Actions */}
+            {user ? (
+              <>
+                <Link to="/notifications" className="block text-gray-600 hover:text-green-600 hover:pl-2 transition-all duration-200">
+                  Notifications
                 </Link>
-              )}
-
-              {/* Add Product (Only for Manufacturers) */}
-              {isManufacturer && (
-                <Link to="/AddProduct" className="block text-blue-600 hover:text-blue-700 font-semibold">
-                  Add Product
+                {isUser && (
+                  <Link to="/mycart" className="block text-gray-600 hover:text-green-600 hover:pl-2 transition-all duration-200">
+                    Cart
+                  </Link>
+                )}
+                <Link to="/dashboard" className="block text-gray-600 hover:text-green-600 hover:pl-2 transition-all duration-200">
+                  Dashboard
                 </Link>
-              )}
-
-              {/* User Actions */}
-              {user ? (
-                <>
-                  <Link to="/notifications" className="block text-gray-600 hover:text-green-600">
-                    Notifications
-                  </Link>
-                  {isUser && (
-                    <Link to="/mycart" className="block text-gray-600 hover:text-green-600">
-                      Cart
-                    </Link>
-                  )}
-                  <Link to="/dashboard" className="block text-gray-600 hover:text-green-600">
-                    Dashboard
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="block text-green-600 hover:text-green-700 font-medium"
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link to="/login" className="block text-gray-600 hover:text-green-600">
-                    Login
-                  </Link>
-                  <Link
-                    to="/register"
-                    className="block bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
-                  >
-                    Register
-                  </Link>
-                </>
-              )}
-            </div>
+                <button
+                  onClick={handleLogout}
+                  className="block text-green-600 hover:text-green-700 font-medium hover:pl-2 transition-all duration-200"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="block text-gray-600 hover:text-green-600 hover:pl-2 transition-all duration-200">
+                  Login
+                </Link>
+                <Link
+                  to="/register"
+                  className="block bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 hover:pl-2 transition-all duration-200"
+                >
+                  Register
+                </Link>
+              </>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </nav>
   );

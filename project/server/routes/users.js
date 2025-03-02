@@ -123,7 +123,18 @@ router.delete('/mycart/:productId', async (req, res) => {
 });
 
 
+router.get('/count_users', async (req, res) => {
+  try {
+    
+console.log("he")
+    const count = await User.countDocuments(); // Assuming you're using Mongoose
+    res.json({ count });
 
+
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 
 export default router;
