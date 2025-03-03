@@ -302,6 +302,7 @@ router.post('/purchase', async (req, res) => {
 
     // Add the product to the user's purchaseHistory array
     user.purchaseHistory.push(product); // You can add more fields if needed
+    user.greenCredits += product.greenScore;
     await user.save();
 
     // Find the manufacturer by ID from the product
